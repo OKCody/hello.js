@@ -15,7 +15,7 @@
 <script class="pre">
 function profile(network) {
 	var github = hello(network);
-	github.login({display:'page'}).then(function() {
+	github.login({display:'none'}).then(function() {
 		// get user profile data
 		return github.api('me');
 	})
