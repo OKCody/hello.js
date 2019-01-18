@@ -53,7 +53,7 @@ function userEmail(network, target) {
 <script class="pre">
 function userRepos(network, target) {
 	var github = hello(network)
-	github.login()
+	github.login({display:'none'})
 	.then(function() {
 		// Get a bespoke endpoint from github
 		return github.api('/user/repos');
