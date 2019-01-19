@@ -14,6 +14,11 @@
 /////////////////////////////////////////////
 /////////////////////////////////////////////
 /////////////////////////////////////////////
+function online(session) {
+	var currentTime = (new Date()).getTime() / 1000;
+	return session && session.access_token && session.expires > currentTime;
+};
+
 
 hello.init({
 	github : '56a389a205c3901f7ba9'
@@ -23,17 +28,13 @@ hello.init({
 });
 var network = 'github';
 var github = hello(network);
-github.login({display:'page', redirect:'github.html'})
-.then(function() {
-	// Get a bespoke endpoint from github
-	return github.api('/user/repos');
-}).then(function(r) {
-	for(var i=0; i < r.data.length; i++){
-		var para = document.createElement('p');
-		var repo = document.createTextNode(r.data[i].full_name);
-		para.appendChild(repo);
-		document.getElementById(target).appendChild(para);
-	}
+if(!online(github.getAuthResponse())){
+	github.login({display:'page', redirect:'github.html'})
+}
+else{
+	github.api('/user/repos');
+}
+
 });
 
 </script>
