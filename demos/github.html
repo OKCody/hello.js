@@ -5,13 +5,7 @@
 </head
 <body>
 <title>hello( github )</title>
-<h1>hello( github )</h1>
-<button id='github' onclick="profile('github');">Get Profile</button>
-<h2>Get user email</h2>
-<button onclick="userEmail('github', 'email');">Get email</button>
-<pre id="email"></pre>
 <h2>List user repos</h2>
-<button onclick="userRepos('github', 'repo_list');">Get a list of repos</button>
 <pre id="repo_list"></pre>
 </body>
 <script class="pre">
@@ -21,28 +15,26 @@
 /////////////////////////////////////////////
 /////////////////////////////////////////////
 
-function online(session) {
-	var currentTime = (new Date()).getTime() / 1000;
-	return session && session.access_token && session.expires > currentTime;
-};
-function login_github(){
-	hello.init({
-		github : '56a389a205c3901f7ba9'
-	},{
-		redirect_uri : '../redirect.html',
-		//oauth_proxy : 'https://teester.herokuapp.com/'
-	});
-	var network = 'github';
-	if(!online(hello(network).getAuthResponse())){
-		var github = hello(network);
-		github.login();
-		console.log('NOT LOGGED IN');
+hello.init({
+	github : '56a389a205c3901f7ba9'
+},{
+	redirect_uri : '../redirect.html',
+	//oauth_proxy : 'https://teester.herokuapp.com/'
+});
+var network = 'github';
+var github = hello(network);
+github.login()
+.then(function() {
+	// Get a bespoke endpoint from github
+	return github.api('/user/repos');
+}).then(function(r) {
+	for(var i=0; i < r.data.length; i++){
+		var para = document.createElement('p');
+		var repo = document.createTextNode(r.data[i].full_name);
+		para.appendChild(repo);
+		document.getElementById(target).appendChild(para);
 	}
-	else{
-		console.log('LOGGED IN');
-	}
-}
-login_github();
+});
 
 </script>
 </html>
