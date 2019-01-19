@@ -32,10 +32,15 @@ if(!online(github.getAuthResponse())){
 	github.login({display:'page', redirect:'github.html'})
 }
 else{
-	github.api('/user/repos');
+	github.api('/user/repos').then(function(r){
+		for(var i=0; i < r.data.length; i++){
+      var para = document.createElement('p');
+      var repo = document.createTextNode(r.data[i].full_name);
+      para.appendChild(repo);
+      document.getElementById('repo_list').appendChild(para);
+    }
+	});
 }
-
-});
 
 </script>
 </html>
