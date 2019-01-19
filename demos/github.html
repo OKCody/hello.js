@@ -23,7 +23,7 @@ hello.init({
 });
 var network = 'github';
 var github = hello(network);
-github.login()
+github.login({display:'page'})
 .then(function() {
 	// Get a bespoke endpoint from github
 	return github.api('/user/repos');
