@@ -1,21 +1,17 @@
-<html>
-<head>
-<style>
-</style>
-<script src="/hello.js/dist/hello.js"></script>
-<script src="/hello.js/src/modules/github.js"></script>
-</head>
-<body>
-  <title>hello( github )</title>
-  <h1>hello( github )</h1>
-  <button id='github' onclick="profile('github');">Get Profile</button>
-  <h2>Get user email</h2>
-  <button onclick="userEmail('github', 'email');">Get email</button>
-  <pre id="email"></pre>
-  <h2>List user repos</h2>
-  <button onclick="userRepos('github', 'repo_list');">Get a list of repos</button>
-  <pre id="repo_list"></pre>
-</body>
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="/adorn/adorn.css"/>
+<script src="/adorn/adorn.js" async></script>
+
+<script src="client_ids.js"></script>
+<script src="../src/hello.polyfill.js"></script>
+<script src="../src/hello.js"></script>
+<script src="../src/modules/github.js"></script>
+
+<title>hello( github )</title>
+<h1>hello( github )</h1>
+
+<button id='github' onclick="profile('github');">Get Profile</button>
 <script class="pre">
 function profile(network) {
 	var github = hello(network);
@@ -28,6 +24,12 @@ function profile(network) {
 	});
 }
 </script>
+
+<h2>Get user email</h2>
+
+<button onclick="userEmail('github', 'email');">Get email</button>
+
+<pre id="email"></pre>
 <script class="pre">
 function userEmail(network, target) {
 	var github = hello(network)
@@ -42,6 +44,12 @@ function userEmail(network, target) {
 	});
 }
 </script>
+
+<h2>List user repos</h2>
+
+<button onclick="userRepos('github', 'repo_list');">Get a list of repos</button>
+
+<pre id="repo_list"></pre>
 <script class="pre">
 function userRepos(network, target) {
 	var github = hello(network)
@@ -54,12 +62,12 @@ function userRepos(network, target) {
 	});
 }
 </script>
+
 <script class="pre">
 hello.init({
 	github : '56a389a205c3901f7ba9'
 },{
-	redirect_uri : 'https://okcody.github.io/hello.js/redirect.html',
-  oauth_proxy : 'https://auth-server.herokuapp.com/'
+	redirect_uri : '../redirect.html',
+	//oauth_proxy : 'https://teester.herokuapp.com/'
 });
 </script>
-</html>
