@@ -15,7 +15,7 @@
 <script class="pre">
 function profile(network) {
 	var github = hello(network);
-	github.login({display:'page'}).then(function() {
+	github.login().then(function() {
 		// get user profile data
 		return github.api('me');
 	})
@@ -34,8 +34,7 @@ function profile(network) {
 function userEmail(network, target) {
 	var github = hello(network)
 	github.login({
-		scope:'email',
-		display: 'page'
+		scope:'email'
 	})
 	.then(function() {
 		// Get a bespoke endpoint from github
@@ -54,7 +53,7 @@ function userEmail(network, target) {
 <script class="pre">
 function userRepos(network, target) {
 	var github = hello(network)
-	github.login({display:'page'})
+	github.login()
 	.then(function() {
 		// Get a bespoke endpoint from github
 		return github.api('/user/repos');
