@@ -59,6 +59,7 @@ function list_repos(target){
 function repo_files(repo, target){
 	clean(target, list_files(repo, target));
 	window.location.hash = repo.getAttribute('data-repo');
+	console.log('haha');
 }
 
 function list_files(which, target){
