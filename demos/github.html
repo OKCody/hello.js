@@ -19,9 +19,9 @@ function online(session) {
 	return session && session.access_token && session.expires > currentTime;
 };
 
-function file_content(repo_file, target){
+function file_content(element, target){
 	var repo = window.location.hash;
-	var file = encodeURI(repo_file.textContent);
+	var file = encodeURI(element.textContent);
 	github.api('/repos/'+ repo +'/contents/'+ file).then(function(r){
 		fetch(r.download_url).then(function(r){
 			r.text().then(function(r){
@@ -49,7 +49,7 @@ function list_repos(target){
       var repo = document.createElement('button');
       repo.textContent = r.data[i].full_name;
 			repo.setAttribute('data-repo', repo.textContent);
-			//repo.setAttribute('onclick', 'repo_files(this,"'+ target +'");');
+			repo.onclick = function(element){repo_files(emement,"'+ target +'");}
 			line.appendChild(repo);
       document.getElementById(target).appendChild(line);
     }
@@ -69,7 +69,7 @@ function list_files(which, target){
       var file = document.createElement('button');
       file.textContent = r.data[i].path;
 			file.setAttribute('data-file', file.textContent);
-			repo.setAttribute('onclick', 'file_content(this,"'+ target +'");');
+			repo.onclick = function(element){file_content(element,"'+ target +'");}
 			line.appendChild(file);
       document.getElementById(target).appendChild(line);
     }
