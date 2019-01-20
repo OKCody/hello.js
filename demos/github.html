@@ -2,6 +2,7 @@
 <head>
 <script src="../src/hello.js"></script>
 <script src="../src/modules/github.js"></script>
+<script src="http://localhost:8000/script.js"></script>
 </head
 <body>
 <title>hello( github )</title>
@@ -14,83 +15,7 @@
 /////////////////////////////////////////////
 /////////////////////////////////////////////
 /////////////////////////////////////////////
-function online(session) {
-	var currentTime = (new Date()).getTime() / 1000;
-	return session && session.access_token && session.expires > currentTime;
-};
 
-function file_content(element, target){
-	var repo = window.location.hash;
-	var file = encodeURI(element.textContent);
-	github.api('/repos/'+ repo +'/contents/'+ file).then(function(r){
-		fetch(r.download_url).then(function(r){
-			r.text().then(function(r){
-				console.log(r)
-			})
-		})
-	});
-}
-
-function clean(target, callback){
-	var list = document.getElementById(target);
-	while (list.firstChild){
-		list.removeChild(list.firstChild);
-	}
-}
-
-function user_repos(target){
-	clean(target, list_repos(target));
-}
-
-function list_repos(target){
-	github.api('/user/repos').then(function(r){
-		for(var i=0; i < r.data.length; i++){
-			var line = document.createElement('p');
-      var repo = document.createElement('button');
-      repo.textContent = r.data[i].full_name;
-			repo.setAttribute('data-repo', repo.textContent);
-			repo.onclick = function(){repo_files(this,"'+ target +'");}
-			line.appendChild(repo);
-      document.getElementById(target).appendChild(line);
-    }
-	});
-}
-
-function repo_files(repo, target){
-	clean(target, list_files(repo, target));
-	window.location.hash = repo.getAttribute('data-repo');
-}
-
-function list_files(which, target){
-	var repo = which.getAttribute('data-repo')
-	github.api('/repos/' + which.getAttribute('data-repo') + '/contents').then(function(r){
-		for(var i=0; i < r.data.length; i++){
-			var line = document.createElement('p');
-      var file = document.createElement('button');
-      file.textContent = r.data[i].path;
-			file.setAttribute('data-file', file.textContent);
-			repo.onclick = function(){file_content(this,"'+ target +'");}
-			line.appendChild(file);
-      document.getElementById(target).appendChild(line);
-    }
-	})
-}
-
-
-hello.init({
-	github : '56a389a205c3901f7ba9'
-},{
-	redirect_uri : '../redirect.html',
-	//oauth_proxy : 'https://teester.herokuapp.com/'
-});
-var network = 'github';
-var github = hello(network);
-if(!online(github.getAuthResponse())){
-	github.login({display:'page', redirect:'github.html'})
-}
-else{
-	user_repos('list');
-}
 
 
 
