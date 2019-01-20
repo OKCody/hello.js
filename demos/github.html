@@ -6,7 +6,7 @@
 <body>
 <title>hello( github )</title>
 <h2>List user repos</h2>
-<pre id="repo_list"></pre>
+<pre id="list"></pre>
 </body>
 <script class="pre">
 
@@ -18,6 +18,60 @@ function online(session) {
 	var currentTime = (new Date()).getTime() / 1000;
 	return session && session.access_token && session.expires > currentTime;
 };
+
+function content(){
+	github.api('/repos/okcody/OS_Biology/contents/2-2Water.md').then(function(r){
+		fetch(r.download_url).then(function(r){
+			r.text().then(function(r){
+				console.log(r)
+			})
+		})
+	});
+}
+
+function clean(target, callback){
+	var list = document.getElementById(target);
+	while (list.firstChild){
+		list.removeChild(list.firstChild);
+	}
+}
+
+function user_repos(target){
+	clean(target, list_repos(target));
+}
+
+function list_repos(target){
+	github.api('/user/repos').then(function(r){
+		for(var i=0; i < r.data.length; i++){
+			var line = document.createElement('p');
+      var repo = document.createElement('button');
+			window.location.hash = 
+      repo.textContent = r.data[i].full_name;
+			repo.setAttribute('data-repo', repo.textContent);
+			repo.setAttribute('onclick', 'repo_files(this,"'+ target +'");');
+			line.appendChild(repo);
+      document.getElementById(target).appendChild(line);
+    }
+	});
+}
+
+function repo_files(repo, target){
+	clean(target, list_files(repo, target));	
+}
+
+function list_files(which, target){
+	var repo = which.getAttribute('data-repo')
+	github.api('/repos/' + which.getAttribute('data-repo') + '/contents').then(function(r){
+		for(var i=0; i < r.data.length; i++){
+			var line = document.createElement('p');
+      var file = document.createElement('button');
+      file.textContent = r.data[i].path;
+			file.setAttribute('data-file', file.textContent);
+			line.appendChild(file);
+      document.getElementById(target).appendChild(line);
+    }
+	})
+}
 
 
 hello.init({
@@ -32,14 +86,7 @@ if(!online(github.getAuthResponse())){
 	github.login({display:'page', redirect:'github.html'})
 }
 else{
-	github.api('/user/repos').then(function(r){
-		for(var i=0; i < r.data.length; i++){
-      var para = document.createElement('p');
-      var repo = document.createTextNode(r.data[i].full_name);
-      para.appendChild(repo);
-      document.getElementById('repo_list').appendChild(para);
-    }
-	});
+	user_repos('list');
 }
 
 </script>
