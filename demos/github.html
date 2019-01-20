@@ -19,8 +19,10 @@ function online(session) {
 	return session && session.access_token && session.expires > currentTime;
 };
 
-function content(){
-	github.api('/repos/okcody/OS_Biology/contents/2-2Water.md').then(function(r){
+function file_content(repo_file, target){
+	var repo = window.location.hash;
+	var file = encodeURI(repo_file.textContent);
+	github.api('/repos/'+ repo +'/contents/'+ file).then(function(r){
 		fetch(r.download_url).then(function(r){
 			r.text().then(function(r){
 				console.log(r)
@@ -45,7 +47,6 @@ function list_repos(target){
 		for(var i=0; i < r.data.length; i++){
 			var line = document.createElement('p');
       var repo = document.createElement('button');
-			window.location.hash = 
       repo.textContent = r.data[i].full_name;
 			repo.setAttribute('data-repo', repo.textContent);
 			repo.setAttribute('onclick', 'repo_files(this,"'+ target +'");');
@@ -56,7 +57,8 @@ function list_repos(target){
 }
 
 function repo_files(repo, target){
-	clean(target, list_files(repo, target));	
+	clean(target, list_files(repo, target));
+	window.location.hash = repo.getAttribute('data-repo');
 }
 
 function list_files(which, target){
@@ -67,6 +69,7 @@ function list_files(which, target){
       var file = document.createElement('button');
       file.textContent = r.data[i].path;
 			file.setAttribute('data-file', file.textContent);
+			repo.setAttribute('onclick', 'file_content(this,"'+ target +'");');
 			line.appendChild(file);
       document.getElementById(target).appendChild(line);
     }
