@@ -49,7 +49,7 @@ function list_repos(target){
       var repo = document.createElement('button');
       repo.textContent = r.data[i].full_name;
 			repo.setAttribute('data-repo', repo.textContent);
-			repo.onclick = function(element){repo_files(emement,"'+ target +'");}
+			repo.onclick = function(){repo_files(this,"'+ target +'");}
 			line.appendChild(repo);
       document.getElementById(target).appendChild(line);
     }
@@ -69,7 +69,7 @@ function list_files(which, target){
       var file = document.createElement('button');
       file.textContent = r.data[i].path;
 			file.setAttribute('data-file', file.textContent);
-			repo.onclick = function(element){file_content(element,"'+ target +'");}
+			repo.onclick = function(){file_content(this,"'+ target +'");}
 			line.appendChild(file);
       document.getElementById(target).appendChild(line);
     }
@@ -91,6 +91,9 @@ if(!online(github.getAuthResponse())){
 else{
 	user_repos('list');
 }
+
+
+
 
 </script>
 </html>
